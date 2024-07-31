@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- HTML文書がHTML5であることを宣言する -->
+    <meta charset="UTF-8">
+    <!-- 文書の文字エンコードをUTF-8に設定する -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ビューポートの設定。モバイルデバイスでの表示を最適化する -->
+    <title>TRPG ゲーム</title>
+    <!-- ブラウザのタブに表示されるページのタイトル -->
+    <style>
+        /* 全体のスタイル設定 */
+        body {
+            font-family: Arial, sans-serif;
+            /* フォントファミリーを指定。Arialを優先し、無い場合はsans-serifを使用 */
+            background-color: #f0f0f0;
+            /* 背景色を設定 */
+            margin: 0;
+            /* デフォルトのマージンを削除 */
+            padding: 0;
+            /* デフォルトのパディングを削除 */
+        }
+        #game-container {
+            width: 80%;
+            /* ゲームコンテナの幅を画面の80%に設定 */
+            margin: 0 auto;
+            /* コンテナを中央に配置 */
+            padding: 20px;
+            /* 内部のパディングを設定 */
+            background: #fff;
+            /* 背景色を白に設定 */
+            border-radius: 8px;
+            /* 角を丸くする */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* 軽いシャドウを追加 */
+        }
+        #dialogue-box {
+            margin-bottom: 20px;
+            /* 下に20pxのマージンを設定 */
+            padding: 10px;
+            /* 内部のパディングを設定 */
+            background: #e0e0e0;
+            /* 背景色を淡いグレーに設定 */
+            border-radius: 4px;
+            /* 角を少し丸くする */
+        }
+        input, button {
+            margin-top: 10px;
+            /* 上に10pxのマージンを設定 */
+            padding: 10px;
+            /* 内部のパディングを設定 */
+            font-size: 16px;
+            /* フォントサイズを16pxに設定 */
+        }
+        #input-container {
+            margin-bottom: 20px;
+            /* 下に20pxのマージンを設定 */
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- ゲームコンテナの開始 -->
+        <div id="dialogue-box">TRPG ゲームへようこそ！キャラクターの詳細とアクションを入力してください。</div>
+        <!-- ゲームのメッセージを表示するボックス -->
+        <div id="input-container">
+            <!-- 入力フォームを囲むコンテナ -->
+            <input type="text" id="time-input" placeholder="ゲーム内の時代設定を入力してください">
+            <!-- ゲーム内の時間を入力するテキストボックス -->
+            <input type="text" id="profession-input" placeholder="キャラクターの職業を入力してください">
+            <!-- キャラクターの職業を入力するテキストボックス -->
+            <button id="start-btn">ゲーム開始</button>
+            <!-- ゲームを開始するボタン -->
+        </div>
+        <textarea id="action-input" placeholder="ここにアクションを入力してください..." rows="4" cols="50"></textarea>
+        <!-- アクションを入力するためのテキストエリア -->
+        <button id="action-btn">アクションを実行</button>
+        <!-- 入力したアクションを実行するボタン -->
+    </div>
+    <script>
+        // 「ゲーム開始」ボタンがクリックされたときの処理
+        document.getElementById('start-btn').addEventListener('click', async () => {
+            const time = document.getElementById('time-input').value;
+            const profession = document.getElementById('profession-input').value;
+
+            try {
+                // サーバーに対してPOSTリクエストを送信
+                const response = await fetch('/api/chatgpt/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ time, profession })
+                });
+                // サーバーからのレスポンスを取得
+                const data = await response.json();
+                // レスポンスのメッセージをダイアログボックスに表示
+                document.getElementById('dialogue-box').innerText = data.message;
+            } catch (error) {
+                // エラー発生時の処理
+                console.error('Error:', error);
+                document.getElementById('dialogue-box').innerText = 'エラーが発生しました。再試行してください。';
+            }
+        });
+
+        // 「アクションを実行」ボタンがクリックされたときの処理
+        document.getElementById('action-btn').addEventListener('click', async () => {
+            const action = document.getElementById('action-input').value;
+
+            try {
+                // サーバーに対してPOSTリクエストを送信
+                const response = await fetch('/api/chatgpt/action', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action })
+                });
+                // サーバーからのレスポンスを取得
+                const data = await response.json();
+                // レスポンスのメッセージをダイアログボックスに表示
+                document.getElementById('dialogue-box').innerText = data.message;
+            } catch (error) {
+                // エラー発生時の処理
+                console.error('Error:', error);
+                document.getElementById('dialogue-box').innerText = 'エラーが発生しました。再試行してください。';
+            }
+        });
+    </script>
+</body>
+</html>
