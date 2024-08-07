@@ -6,76 +6,170 @@
     <!-- 文書の文字エンコードをUTF-8に設定する -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- ビューポートの設定。モバイルデバイスでの表示を最適化する -->
-    <title>TRPG ゲーム</title>
+    <title>AI TRPG</title>
     <!-- ブラウザのタブに表示されるページのタイトル -->
     <style>
         /* 全体のスタイル設定 */
         body {
             font-family: Arial, sans-serif;
             /* フォントファミリーを指定。Arialを優先し、無い場合はsans-serifを使用 */
-            background-color: #f0f0f0;
+            background-image: url("images/backphoto.png");
+            background-size: cover; 
+            background-attachment: fixed;
+            background-position: center center;
             /* 背景色を設定 */
             margin: 0;
             /* デフォルトのマージンを削除 */
             padding: 0;
             /* デフォルトのパディングを削除 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         #game-container {
-            width: 80%;
-            /* ゲームコンテナの幅を画面の80%に設定 */
+            width: 90%;
+            /* ゲームコンテナの幅を画面の90%に設定 */
             margin: 0 auto;
             /* コンテナを中央に配置 */
-            padding: 20px;
-            /* 内部のパディングを設定 */
-            background: #fff;
-            /* 背景色を白に設定 */
             border-radius: 8px;
             /* 角を丸くする */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* 軽いシャドウを追加 */
+            text-align: center;
         }
-        #dialogue-box {
-            margin-bottom: 20px;
-            /* 下に20pxのマージンを設定 */
+        .dialogue-box {
+            margin-bottom: 25px;
+            /* 下に25pxのマージンを設定 */
             padding: 10px;
             /* 内部のパディングを設定 */
-            background: #e0e0e0;
-            /* 背景色を淡いグレーに設定 */
             border-radius: 4px;
             /* 角を少し丸くする */
+            height: 64px;
+            font-size: 60px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            -webkit-text-stroke-color: #9E8B6D;
+            -webkit-text-stroke-width: 0.5px;
+            background: linear-gradient(0deg, #9E8B6D 0%, #FFFFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        input, button {
-            margin-top: 10px;
+        input {
+            width: calc(100% - 20px);
+            margin-top: 7px;
             /* 上に10pxのマージンを設定 */
+            margin-bottom: 30px;
             padding: 10px;
             /* 内部のパディングを設定 */
             font-size: 16px;
             /* フォントサイズを16pxに設定 */
+            border-radius: 4px;
+            border: 2px solid #9E8B6D;
+            background-image: url("images/textback.png");
+            height: 40px;
+            background-size: cover; 
+            background-attachment: fixed;
+            background-position: center center;
+        }
+        label{
+            float: left;
+            font-family: Zen Old Mincho;
+            font-size: 16px;
+            color: #645C4E;
+        }
+        textarea{
+            font-size: 16px;
+            resize: none;
+            width: 85%;
+            background-color: #68645C;
+            height: 130px;
+            justify-content: space-between;
+            color: white;
+        }
+        #textarea-box{
+            background-color: #827C71;
+            height: 140px;
+            padding: 10px;
+            resize: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        #action-btn{
+            display: inline-block;
+            background-color: #827C71;
+            border: 1px solid #827C71;
+        }
+        #start-btn{
+            background: linear-gradient(to bottom, #C4BFB6, #827C71);;
+            color: #FFFFFF;
+            border: 1px solid #ccc;
+            float: left;
+            width: 153px;
+            margin-top: 10px;
+            /* 上に10pxのマージンを設定 */
+            padding: 10px;
+            /* 内部のパディングを設定 */
+            font-size: 18px;
+            /* フォントサイズを16pxに設定 */
+            font-family: 'Times New Roman', Times, serif;
+            height: 40px;
+            margin-bottom: 25px;
+            margin-right: 200px;
         }
         #input-container {
             margin-bottom: 20px;
             /* 下に20pxのマージンを設定 */
+        }
+        .worldview-box{
+            margin-top: 100px;
+            padding: 20px;
+            background-color: rgba(104, 100, 92, 0.6);
+            color: white;
+            text-align: left;
+            font-family: Zen Old Mincho;
+            font-size: 16px;
+            margin-bottom: 170px;
+        }
+        p{
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
         <!-- ゲームコンテナの開始 -->
-        <div id="dialogue-box">TRPG ゲームへようこそ！キャラクターの詳細とアクションを入力してください。</div>
+        <div class="dialogue-box">AI TRPG</div>
         <!-- ゲームのメッセージを表示するボックス -->
         <div id="input-container">
             <!-- 入力フォームを囲むコンテナ -->
-            <input type="text" id="time-input" placeholder="ゲーム内の時代設定を入力してください">
+             <label for = "time-input">ゲーム内の時代設定を入力</label>
+            <input type="text" id="time-input">
             <!-- ゲーム内の時間を入力するテキストボックス -->
-            <input type="text" id="profession-input" placeholder="キャラクターの職業を入力してください">
+            <label for = "profession-input">キャラクターの職業を入力</label>
+            <input type="text" id="profession-input">
             <!-- キャラクターの職業を入力するテキストボックス -->
-            <button id="start-btn">ゲーム開始</button>
+            <button id="start-btn">START</button>
             <!-- ゲームを開始するボタン -->
+            <div id="dialogue-box" class="worldview-box">
+                <p>
+                    世界観:<br>
+                    この世界は戦国時代を舞台にしており、各地の戦国大名が争いを繰り広げる中、あなたは一人の憎居として生きています。借目は戦国時代
+                    において、戦の収束や平和の仲介、また人々の心の支えとして重要な役割を果たしています。あなたは修行を積んだ潜呂として、様々な困難に立ち向かうことになります。</p>                
+                <p>
+                    初期シナリオ:<br>
+                    あなたはある村に住む僧侶として、その村を訪れた戦国大名の一団に招かれることとなりました。大名はこの地を支配するために村人たちに圧力をかけており、村は不穏な空気に包まれています。あなたは大名の要請を受けて、村人たちの悩みを聞き、彼らの心を癒すことに挑むことになります。</p>
+                    
+                <p>    
+                    初期シナリオ:<br>
+                    あなたはある村に住む僧侶として、その村を訪れた戦国大名の一団に招かれることとなりました。大名はこの地を支配するために村人たちに圧力をかけており、村は不穏な空気に包まれています。</p>
+            </div>
         </div>
-        <textarea id="action-input" placeholder="ここにアクションを入力してください..." rows="4" cols="50"></textarea>
-        <!-- アクションを入力するためのテキストエリア -->
-        <button id="action-btn">アクションを実行</button>
-        <!-- 入力したアクションを実行するボタン -->
+        <div id="textarea-box">
+            <textarea id="action-input" rows="4" cols="50"></textarea>
+            <!-- アクションを入力するためのテキストエリア -->
+            <button id="action-btn"><img src="images/arrow.png" height="24" width="24"/></button>
+            <!-- 入力したアクションを実行するボタン -->
+        </div>
     </div>
     <script>
         // 「ゲーム開始」ボタンがクリックされたときの処理
