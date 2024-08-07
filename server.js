@@ -5,13 +5,15 @@ const axios = require('axios');
 const path = require('path');
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// Expressを用いたアプリケーションの初期設定
+// 'express' モジュールを使ってアプリケーションを作成
+app.use(cors()); // 全てのリクエストに対してCORSを許可
+app.use(bodyParser.json()); // リクエストのボディをJSONとしてパース
+app.use(express.static(path.join(__dirname, 'public'))); // 'public' ディレクトリを静的ファイルの配信場所として設定
 
 // デフォルトルート
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // ルートにアクセスがあった際に 'public/index.html' を返す
 });
 
 // シナリオを保存するための変数
@@ -20,8 +22,10 @@ let savedScenario = '';
 // ゲーム開始エンドポイント
 app.post('/api/chatgpt/start', async (req, res) => {
     try {
+        // クライアントから送られてくる時代設定と職業を取得
         const { time, profession } = req.body;
 
+        // OpenAI APIにPOSTリクエストを送信
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: "gpt-3.5-turbo",
             messages: [
@@ -32,7 +36,7 @@ app.post('/api/chatgpt/start', async (req, res) => {
             temperature: 0.7
         }, {
             headers: {
-                'Authorization': `Bearer {あなたのAPIキーをいれてください}`,
+                'Authorization': `Bearer APIキー`, // APIキーを設定
                 'Content-Type': 'application/json'
             }
         });
@@ -40,8 +44,10 @@ app.post('/api/chatgpt/start', async (req, res) => {
         // 生成されたシナリオを保存
         savedScenario = response.data.choices[0].message.content;
 
+        // クライアントに生成されたシナリオを返す
         res.json({ message: savedScenario });
     } catch (error) {
+        // エラーハンドリング
         console.error('Error details:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: 'エラーが発生しました', details: error.response ? error.response.data : error.message });
     }
@@ -52,6 +58,7 @@ app.post('/api/chatgpt/action', async (req, res) => {
     try {
         const { action } = req.body;
 
+        // OpenAI APIにPOSTリクエストを送信
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: "gpt-3.5-turbo",
             messages: [
@@ -62,18 +69,21 @@ app.post('/api/chatgpt/action', async (req, res) => {
             temperature: 0.7
         }, {
             headers: {
-                'Authorization': `Bearer {あなたのAPIキーをいれてください}`,
+                'Authorization': `Bearer APIキー`, // APIキーを設定
                 'Content-Type': 'application/json'
             }
         });
 
+        // クライアントに次のシナリオを返す
         res.json({ message: response.data.choices[0].message.content });
     } catch (error) {
+        // エラーハンドリング
         console.error('Error details:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: 'エラーが発生しました', details: error.response ? error.response.data : error.message });
     }
 });
 
+// サーバーをポート3000で起動
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
